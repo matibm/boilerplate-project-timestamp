@@ -25,6 +25,7 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+
 app.get("/api/timestamp/:date", function(req, res) {
     let input = req.params.date;
     if (input.indexOf('-') == -1) {
@@ -70,7 +71,7 @@ app.get("/api/timestamp/:date", function(req, res) {
     var monthShortName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ][date.getMonth()];
-    let dateString = weekday + ', ' + day + ', ' + monthShortName + ' ' + date.getFullYear() + ' ' + date.toLocaleTimeString('en-US', { hour12: false, timeZone: 'GMT', timeZoneName: 'short' })
+    let dateString = weekday + ', ' + day + ', ' + monthShortName + ' ' + date.getFullYear() + ' ' + date.toLocaleTimeString('en-US', { hour12: false }) + ' GMT'
 
     res.json({
         unix: date.valueOf(),
@@ -93,7 +94,7 @@ app.get("/api/timestamp", function(req, res) {
     var monthShortName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ][date.getMonth()];
-    let dateString = weekday + ', ' + day + ', ' + monthShortName + ' ' + date.getFullYear() + ' ' + date.toLocaleTimeString('en-US', { hour12: false, timeZone: 'GMT', timeZoneName: 'short' })
+    let dateString = weekday + ', ' + day + ', ' + monthShortName + ' ' + date.getFullYear() + ' ' + date.toLocaleTimeString('en-US', { hour12: false }) + ' GMT'
 
     res.json({
         unix: date.valueOf(),
