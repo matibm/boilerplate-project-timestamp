@@ -24,15 +24,80 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+
 app.get("/api/timestamp/:date", function(req, res) {
     let input = req.params.date;
     if (input.indexOf('-') == -1) {
         input = parseInt(input);
     }
-    let date = new Date(input)
+    if (!input) {
+        input = 14400000
+    }
+
+    let date = new Date(input);
+
+    if (Object.prototype.toString.call(date) === "[object Date]") {
+        // it is a date
+        if (isNaN(date.getTime())) { // d.valueOf() could also work
+            // date is not valid
+            return res.json({
+                error: 'Invalid Date'
+
+            });
+        } else {
+
+        }
+    } else {
+        return res.json({
+            error: 'not a Date'
+
+        });
+    }
+    var timestamp = Date.parse(input);
+
+    // let date = new Date(input);
+
+
+    var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+        date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    date = new Date(now_utc)
+
+    let day = date.getDate()
+    if (day < 10) {
+        day = '0' + day
+    }
+    let weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()]
+    var monthShortName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ][date.getMonth()];
+    let dateString = weekday + ', ' + day + ', ' + monthShortName + ' ' + date.getFullYear() + ' ' + date.toLocaleTimeString('en-US', { hour12: false, timeZone: 'GMT', timeZoneName: 'short' })
+
     res.json({
         unix: date.valueOf(),
-        utc: date.toString()
+        utc: dateString
+
+    });
+});
+app.get("/api/timestamp", function(req, res) {
+
+    let date = new Date(14400000);
+    var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+        date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    date = new Date(now_utc)
+
+    let day = date.getDate()
+    if (day < 10) {
+        day = '0' + day
+    }
+    let weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()]
+    var monthShortName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ][date.getMonth()];
+    let dateString = weekday + ', ' + day + ', ' + monthShortName + ' ' + date.getFullYear() + ' ' + date.toLocaleTimeString('en-US', { hour12: false, timeZone: 'GMT', timeZoneName: 'short' })
+
+    res.json({
+        unix: date.valueOf(),
+        utc: dateString
 
     });
 });
