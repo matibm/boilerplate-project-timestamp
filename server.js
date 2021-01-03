@@ -58,47 +58,33 @@ app.get("/api/timestamp/:date", function(req, res) {
 
     // let date = new Date(input);
 
-
-    var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-        date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-    date = new Date(now_utc)
-
+ 
     let day = date.getDate()
     if (day < 10) {
         day = '0' + day
     }
-    let weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()]
-    var monthShortName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ][date.getMonth()];
-    let dateString = weekday + ', ' + day + ', ' + monthShortName + ' ' + date.getFullYear() + ' ' + date.toLocaleTimeString('en-US', { hour12: false }) + ' GMT'
-
+    
     res.json({
-        unix: date.valueOf(),
-        utc: dateString
+        unix: date.getTime(),
+        utc: new Date(input).toUTCString()
 
     });
 });
 app.get("/api/timestamp", function(req, res) {
 
-    let date = new Date(14400000);
-    var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-        date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-    date = new Date(now_utc)
+    let date = new Date();
+    // var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+    //     date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    // date = new Date(now_utc)
 
     let day = date.getDate()
     if (day < 10) {
         day = '0' + day
     }
-    let weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()]
-    var monthShortName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ][date.getMonth()];
-    let dateString = weekday + ', ' + day + ', ' + monthShortName + ' ' + date.getFullYear() + ' ' + date.toLocaleTimeString('en-US', { hour12: false }) + ' GMT'
-
+     
     res.json({
-        unix: date.valueOf(),
-        utc: dateString
+        unix: date.getTime(),
+        utc: new Date(date.getTime()).toUTCString()
 
     });
 });
