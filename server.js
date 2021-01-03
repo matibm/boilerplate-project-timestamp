@@ -26,50 +26,72 @@ app.get("/api/hello", function (req, res) {
 
 
 
-app.get("/api/timestamp/:date", function(req, res) {
-    let input = req.params.date;
-    if (input.indexOf('-') == -1) {
-        input = parseInt(input);
-    }
-    if (!input) {
-        input = 14400000
-    }
+// app.get("/api/timestamp/:date_string", function(req, res) {
+//     let input = req.params.date_string;
+//     if (input.indexOf('-') == -1) {
+//         input = parseInt(input);
+//     }
+//     if (!input) {
+//         input = 14400000
+//     }
 
-    let date = new Date(input);
+//     let date = new Date(input);
 
-    if (Object.prototype.toString.call(date) === "[object Date]") {
-        // it is a date
-        if (isNaN(date.getTime())) { // d.valueOf() could also work
-            // date is not valid
-            return res.json({
-                error: 'Invalid Date'
+//     if (Object.prototype.toString.call(date) === "[object Date]") {
+//         // it is a date
+//         if (isNaN(date.getTime())) { // d.valueOf() could also work
+//             // date is not valid
+//             return res.json({
+//                 error: 'Invalid Date'
 
-            });
-        } else {
+//             });
+//         } else {
 
-        }
-    } else {
-        return res.json({
-            error: 'not a Date'
+//         }
+//     } else {
+//         return res.json({
+//             error: 'not a Date'
 
-        });
-    }
-    var timestamp = Date.parse(input);
+//         });
+//     }
+//     var timestamp = Date.parse(input);
 
-    // let date = new Date(input);
+//     // let date = new Date(input);
 
  
-    let day = date.getDate()
-    if (day < 10) {
-        day = '0' + day
-    }
+//     let day = date.getDate()
+//     if (day < 10) {
+//         day = '0' + day
+//     }
     
-    res.json({
-        unix: date.getTime(),
-        utc: new Date(input).toUTCString()
+//     res.json({
+//         unix: date.getTime(),
+//         utc: new Date(input).toUTCString()
 
-    });
+//     });
+// });
+
+app.get("/api/timestamp/:date_string", (req, res) => {
+  let dateString = req.params.date_string;
+
+  //A 4 digit number is a valid ISO-8601 for the beginning of that year
+  //5 digits or more must be a unix time, until we reach a year 10,000 problem
+  if (/\d{5,}/.test(dateString)) {
+    const dateInt = parseInt(dateString);
+    //Date regards numbers as unix timestamps, strings are processed differently
+    res.json({ unix: dateInt, utc: new Date(dateInt).toUTCString() });
+  } else {
+    let dateObject = new Date(dateString);
+
+    if (dateObject.toString() === "Invalid Date") {
+      res.json({ error: "Invalid Date" });
+    } else {
+      res.json({ unix: dateObject.valueOf(), utc: dateObject.toUTCString() });
+    }
+  }
 });
+
+
 app.get("/api/timestamp", function(req, res) {
 
     let date = new Date();
